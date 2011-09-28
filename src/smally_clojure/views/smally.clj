@@ -11,7 +11,12 @@
         hiccup.page-helpers
 		hiccup.form-helpers))
 		
-(def db (redis/init))
+(def ^{:private true} local-redis-url
+		  "redis://127.0.0.1:6379")
+(def redis-url
+	(get (System/getenv) "REDISTOGO_URL"))
+		
+(def db (redis/init (or redis-url local-redis-url)))
 		
 (defpartial layout [& content]
 		  (html5
@@ -19,6 +24,14 @@
 		     [:title "smal.ly"]]
 		    [:body
 		     content]))
+		
+(defn split-redis-url [url]
+	"Parse the redis url from heroku, eg. redis://redistogo:207d220de51ee4e95454bb89796a6d22@filefish.redistogo.com:9883/"
+	)
+	
+(defn maybe-init []
+	"Checks the connection to initialize."
+	)
 
 (defn next-val
 	"Looks up the next counter value in Redis" 
