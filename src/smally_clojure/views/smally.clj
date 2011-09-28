@@ -25,14 +25,6 @@
 		     [:title "smal.ly"]]
 		    [:body
 		     content]))
-		
-(defn split-redis-url [url]
-	"Parse the redis url from heroku, eg. redis://redistogo:207d220de51ee4e95454bb89796a6d22@filefish.redistogo.com:9883/"
-	)
-	
-(defn maybe-init []
-	"Checks the connection to initialize."
-	)
 
 (defn next-val
 	"Looks up the next counter value in Redis" 
@@ -58,6 +50,7 @@
 		
 (defn get-name [handler]
 	(fn [request]
+		(println (get (System/getenv) "REDISTOGO_URL"))
 		(session/put! :uri (str "http://" (get request :server-name) ":" (get request :server-port)))
 		(handler request)))
 		
