@@ -50,7 +50,6 @@
 		
 (defn get-name [handler]
 	(fn [request]
-		(println (get (System/getenv) "REDISTOGO_URL"))
 		(session/put! :uri (str "http://" (get request :server-name) ":" (get request :server-port)))
 		(handler request)))
 		
