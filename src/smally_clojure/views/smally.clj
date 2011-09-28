@@ -13,10 +13,11 @@
 		
 (def ^{:private true} local-redis-url
 		  "redis://127.0.0.1:6379")
+		
 (def redis-url
 	(get (System/getenv) "REDISTOGO_URL"))
 		
-(def db (redis/init (or redis-url local-redis-url)))
+(def db (redis/init :url (or redis-url local-redis-url)))
 		
 (defpartial layout [& content]
 		  (html5
