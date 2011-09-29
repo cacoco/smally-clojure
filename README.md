@@ -1,6 +1,6 @@
-# smally-clojure
+# smal.ly
 
-A tiny url webapp written in noir. 
+A simple url shortener written in clojure+redis using the noir framework. 
 
 ## Usage
 
@@ -8,10 +8,4 @@ A tiny url webapp written in noir.
 lein deps
 lein run
 ```
-
-## License
-
-Copyright (C) 2011 cacoco
-
-Distributed under the Eclipse Public License, the same as Clojure.
 
