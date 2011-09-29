@@ -60,7 +60,7 @@
 		
 (defpartial url-fields [{:keys [url]}]
 	(validation/on-error :url error-item)
-	(text-field "url" url))
+	(html [:input {:type "text" :maxlength "2000" :name "url" :size "100" :value url}]))
 
 (defn valid? [{:keys [url]}]
 	(validation/rule (validation/min-length? url 5)
@@ -81,5 +81,5 @@
 				
 (defpage [:post "/"] {:as url}	
 	(if (valid? url)
-		(response/json {:url (str (session/get :uri) "/" (set-val (next-val) url))})
+		(response/json {:smally-url (str (session/get :uri) "/" (set-val (next-val) url))})
 		(response/empty)))
