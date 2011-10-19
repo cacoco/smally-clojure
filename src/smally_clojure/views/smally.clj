@@ -11,13 +11,7 @@
         hiccup.page-helpers
 		hiccup.form-helpers))
 		
-(def ^{:private true} local-redis-url
-		  "redis://127.0.0.1:6379")
-		
-(def redis-url
-	(get (System/getenv) "REDISTOGO_URL"))
-		
-(def db (redis/init :url (or redis-url local-redis-url)))
+(def db (redis/init :url (or (get (System/getenv) "REDISTOGO_URL")  "redis://127.0.0.1:6379")))
 		
 (defpartial layout [& content]
 		  (html5
@@ -56,7 +50,7 @@
 (def init (server/add-middleware get-name))
 			
 (defpartial error-item [[first-error]]
-		  [:p.error first-error])
+	[:p.error first-error])
 		
 (defpartial url-fields [{:keys [url]}]
 	(validation/on-error :url error-item)
@@ -67,8 +61,12 @@
 		[:url "Your URL MUST have 5 or more characters."])
 	(not (validation/errors? :url)))
 	
-(defpage "/ping" []
-	(str "PONG"))
+(defpage [:get "/ping"] [ ]
+	"PONG")
+	
+(defpage [:get "/error"] [ ]
+	{:status 500
+		:body "ZONKS! An error has occurred"})
 
 (defpage "/" {:as url}
 	(common/layout
