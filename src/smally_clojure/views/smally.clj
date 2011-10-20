@@ -11,7 +11,10 @@
         hiccup.page-helpers
 		hiccup.form-helpers))
 		
-(def db (redis/init [:url (or (get (System/getenv) "REDISTOGO_URL") "redis://127.0.0.1:6379")]))
+(def ^{:private true} local-redis-url
+				  "redis://127.0.0.1:6379")
+		
+(def db (redis/init [:url (or (get (System/getenv) "REDISTOGO_URL") local-redis-url)]))
 		
 (defpartial layout [& content]
 		  (html5
