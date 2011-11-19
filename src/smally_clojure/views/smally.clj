@@ -1,15 +1,15 @@
 (ns smally-clojure.views.smally
   (:require [smally-clojure.views.common :as common]
-			[noir.validation :as validation]
+            [noir.validation :as validation]
             [noir.response :as response]
-			[noir.options :as options]
-			[noir.session :as session]
-			[noir.server :as server]
-			[clj-redis.client :as redis])
+            [noir.options :as options]
+            [noir.session :as session]
+            [noir.server :as server]
+            [clj-redis.client :as redis])
   (:use noir.core
         hiccup.core
         hiccup.page-helpers
-		hiccup.form-helpers))
+        hiccup.form-helpers))
 		
 (def ^{:private true} local-redis-url
 				  "redis://127.0.0.1:6379")
@@ -23,21 +23,26 @@
 		    [:body
 		     content]))
 
-(defn next-val
-	"Looks up the next counter value in Redis" 
-	[]
-		(def counter 10000000)
-		(def incr-counter
-			(fn [] (redis/incr db "counter")))
-		(if (nil? (redis/get db "counter"))
-			(redis/incrby db "counter" counter)
-			(def counter (incr-counter)))
+; default counter value
+; will be used when there is no value in redis
+(def counter 10000000)
+
+; increase the given key value
+; using redis/incr
+(defn incr [name]
+  (redis/incr db name))
+
+; Looks up the next counter value in Redis
+(defn next-val []
+  (if (nil? (redis/get db "counter"))
+    (redis/incrby db "counter" counter)
+    (binding [counter (incr "counter")]))
 	(eval counter))
 	
 (defn set-val
 	"Sets the url mapped to the counter value in Redis"
 	[counter-val #^String url]
-		(redis/set db (str "url-" counter-val) (get url :url))
+		(redis/set db (str "url-" counter-val) (:url url))
 		(Integer/toString counter-val 32))
 
 (defn get-val
@@ -47,7 +52,7 @@
 		
 (defn get-name [handler]
 	(fn [request]
-		(session/put! :uri (str "http://" (get request :server-name) ":" (get request :server-port)))
+		(session/put! :uri (str "http://" (:server-name request) ":" (:server-port request)))
 		(handler request)))
 		
 (def init (server/add-middleware get-name))
@@ -69,7 +74,7 @@
 	
 (defpage [:get "/error"] [ ]
 	{:status 500
-		:body "ZONKS! An error has occurred"})
+	 :body "ZONKS! An error has occurred"})
 
 (defpage "/" {:as url}
 	(common/layout
