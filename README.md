@@ -1,11 +1,11 @@
 # smal.ly
 
-A simple url shortener written in clojure+redis using the noir framework. 
+A simple url shortener written in clojure+redis using compojure. 
 
 ## Usage
 
-```bash
-lein deps
-lein run
+You can run this using [Foreman](https://github.com/ddollar/foreman):
+
+```foreman start
 ```
 
