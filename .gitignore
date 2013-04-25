@@ -1,8 +1,7 @@
-.DS_Store
 pom.xml
 *jar
 /lib/
 /classes/
+/targets/
+/target/
 .lein-deps-sum
-.env
-*.iml
