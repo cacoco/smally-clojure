@@ -23,7 +23,7 @@
 ; Looks up the next counter value in Redis
 (defn next-val []
   (if (nil? (redis/get db "counter"))
-    (redis/incrby db "counter" counter)
+    (redis/incrby db "counter" @counter)
     (swap! counter (fn [counter] (incr "counter"))))
   (log {:fn "next-val" :counter @counter}))
 

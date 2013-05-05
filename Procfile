@@ -1,1 +1,1 @@
-web: lein run -m smally.server
+web: lein2 run -m smally.server
